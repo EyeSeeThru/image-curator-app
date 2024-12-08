@@ -129,8 +129,13 @@ def export_pdf(view_type):
         css_files = [
             os.path.join(app.static_folder, 'css/custom.css')
         ]
-        base_url = request.url_root
-        pdf_content = generate_pdf_from_html(html_content, css_files, base_url)
+        
+        # Pass the upload folder path for resolving image paths
+        pdf_content = generate_pdf_from_html(
+            html_content=html_content,
+            css_files=css_files,
+            upload_folder=app.config['UPLOAD_FOLDER']
+        )
         
         # Send the PDF file
         from io import BytesIO

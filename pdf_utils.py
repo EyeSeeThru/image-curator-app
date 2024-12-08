@@ -4,19 +4,30 @@ import logging
 import os
 from urllib.parse import urljoin
 
-def generate_pdf_from_html(html_content, css_files=None, base_url=None):
+def generate_pdf_from_html(html_content, css_files=None, upload_folder=None):
     """
     Generate PDF from HTML content
     Args:
         html_content (str): HTML content to convert
         css_files (list): List of CSS file paths
-        base_url (str): Base URL for resolving relative URLs
+        upload_folder (str): Path to the upload folder for resolving image paths
     Returns:
         bytes: Generated PDF content
     """
     try:
-        # Create WeasyPrint HTML object with base URL
-        html = HTML(string=html_content, base_url=base_url)
+        # Replace image URLs with file paths
+        if upload_folder:
+            from bs4 import BeautifulSoup
+            soup = BeautifulSoup(html_content, 'html.parser')
+            for img in soup.find_all('img'):
+                src = img.get('src', '')
+                if 'images/' in src:
+                    filename = src.split('images/')[-1]
+                    img['src'] = f'file://{os.path.abspath(os.path.join(upload_folder, filename))}'
+            html_content = str(soup)
+            
+        # Create WeasyPrint HTML object
+        html = HTML(string=html_content)
         
         # Collect CSS styles
         styles = []
