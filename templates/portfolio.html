@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="portfolio-layout">
+    {% for image in images %}
+    <div class="portfolio-item">
+        <div class="card bg-dark">
+            <img class="card-img-top lazy" 
+                 data-src="{{ url_for('uploaded_file', filename=image.filename) }}"
+                 alt="{{ image.description }}">
+            <div class="card-body">
+                <p class="card-text">{{ image.description }}</p>
+                {% if image.tags %}
+                    <div class="mt-2">
+                        {% for tag in image.tags.split(',') %}
+                            <span class="tag">{{ tag.strip() }}</span>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

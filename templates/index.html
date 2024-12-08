@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-md-8">
+        <input type="text" id="search" class="form-control" placeholder="Search images by tags or description...">
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-6 mx-auto">
+        <form id="upload-form" enctype="multipart/form-data">
+            <div class="drop-zone" id="drop-zone">
+                <p class="mb-2">Drag & drop image here or click to upload</p>
+                <input type="file" id="file-input" name="file" accept="image/*" class="d-none">
+                <button type="button" class="btn btn-outline-primary" onclick="document.getElementById('file-input').click()">
+                    Select File
+                </button>
+            </div>
+            
+            <div class="preview-container">
+                <img id="preview" class="img-fluid">
+            </div>
+            
+            <div class="mb-3">
+                <label for="description" class="form-label">Description</label>
+                <textarea class="form-control" id="description" name="description" rows="2"></textarea>
+            </div>
+            
+            <div class="mb-3">
+                <label for="tags" class="form-label">Tags (comma separated)</label>
+                <input type="text" class="form-control" id="tags" name="tags">
+            </div>
+            
+            <button type="submit" class="btn btn-primary w-100">Upload Image</button>
+        </form>
+    </div>
+</div>
+
+<div class="image-grid">
+    <div class="grid-sizer"></div>
+    {% for image in images %}
+    <div class="grid-item" data-tags="{{ image.tags }}" data-description="{{ image.description }}">
+        <img class="lazy" data-src="{{ url_for('uploaded_file', filename=image.filename) }}" alt="{{ image.description }}">
+        <div class="image-info">
+            <p class="mb-1">{{ image.description }}</p>
+            {% if image.tags %}
+                {% for tag in image.tags.split(',') %}
+                    <span class="tag">{{ tag.strip() }}</span>
+                {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/upload.js') }}"></script>
+{% endblock %}

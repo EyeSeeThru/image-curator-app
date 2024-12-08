@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="newsletter-layout">
+    <h1 class="text-center mb-4">Image Newsletter</h1>
+    {% for image in images %}
+    <article class="mb-5">
+        <img class="img-fluid lazy mb-3" 
+             data-src="{{ url_for('uploaded_file', filename=image.filename) }}"
+             alt="{{ image.description }}">
+        <h3>{{ image.description }}</h3>
+        {% if image.tags %}
+            <div class="mb-3">
+                {% for tag in image.tags.split(',') %}
+                    <span class="tag">{{ tag.strip() }}</span>
+                {% endfor %}
+            </div>
+        {% endif %}
+        <hr class="my-4">
+    </article>
+    {% endfor %}
+</div>
+{% endblock %}
