@@ -12,7 +12,11 @@
     <div class="portfolio-item">
         <div class="card bg-dark">
             <img class="card-img-top lazy" 
-                 data-src="{{ url_for('uploaded_file', filename=image.filename) }}"
+                 {% if for_pdf %}
+                  src="{{ url_for('uploaded_file', filename=image.filename, _external=True) }}"
+                  {% else %}
+                  data-src="{{ url_for('uploaded_file', filename=image.filename) }}"
+                  {% endif %}
                  alt="{{ image.description }}">
             <div class="card-body">
                 <p class="card-text">{{ image.description }}</p>
