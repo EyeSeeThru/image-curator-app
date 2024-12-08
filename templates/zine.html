@@ -1,6 +1,12 @@
 {% extends "base.html" %}
 
 {% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>Zine View</h1>
+    <a href="{{ url_for('export_pdf', view_type='zine') }}" class="btn btn-primary">
+        Export as PDF
+    </a>
+</div>
 <div class="zine-layout">
     {% for image in images %}
     <div class="mb-4">

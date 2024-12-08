@@ -103,5 +103,48 @@ def portfolio():
         logging.error(f"Error in portfolio view: {str(e)}")
         return "Error loading portfolio view", 500
 
+@app.route('/export/<view_type>')
+def export_pdf(view_type):
+    """Export view as PDF"""
+    try:
+        images = Image.query.order_by(Image.created_at.desc()).all()
+        
+        # Get the appropriate template based on view type
+        template_map = {
+            'zine': 'zine.html',
+            'newsletter': 'newsletter.html',
+            'portfolio': 'portfolio.html'
+        }
+        
+        if view_type not in template_map:
+            return "Invalid view type", 400
+            
+        # Render the template
+        html_content = render_template(template_map[view_type], 
+                                     images=images, 
+                                     for_pdf=True)
+        
+        # Generate PDF
+        from pdf_utils import generate_pdf_from_html
+        css_files = [
+            os.path.join(app.static_folder, 'css/custom.css')
+        ]
+        pdf_content = generate_pdf_from_html(html_content, css_files)
+        
+        # Send the PDF file
+        from io import BytesIO
+        pdf_buffer = BytesIO(pdf_content)
+        
+        return send_file(
+            pdf_buffer,
+            mimetype='application/pdf',
+            as_attachment=True,
+            download_name=f'image-curator-{view_type}.pdf'
+        )
+        
+    except Exception as e:
+        logging.error(f"Error exporting PDF: {str(e)}")
+        return f"Error generating PDF: {str(e)}", 500
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=DEBUG)

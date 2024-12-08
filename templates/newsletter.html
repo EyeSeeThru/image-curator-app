@@ -2,7 +2,12 @@
 
 {% block content %}
 <div class="newsletter-layout">
-    <h1 class="text-center mb-4">Image Newsletter</h1>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Image Newsletter</h1>
+        <a href="{{ url_for('export_pdf', view_type='newsletter') }}" class="btn btn-primary">
+            Export as PDF
+        </a>
+    </div>
     {% for image in images %}
     <article class="mb-5">
         <img class="img-fluid lazy mb-3" 
