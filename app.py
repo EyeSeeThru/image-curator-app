@@ -75,18 +75,33 @@ def uploaded_file(filename):
 
 @app.route('/zine')
 def zine():
-    images = Image.query.all()
-    return render_template('zine.html', images=images)
+    """Display images in zine layout"""
+    try:
+        images = Image.query.order_by(Image.created_at.desc()).all()
+        return render_template('zine.html', images=images)
+    except Exception as e:
+        logging.error(f"Error in zine view: {str(e)}")
+        return "Error loading zine view", 500
 
 @app.route('/newsletter')
 def newsletter():
-    images = Image.query.all()
-    return render_template('newsletter.html', images=images)
+    """Display images in newsletter layout"""
+    try:
+        images = Image.query.order_by(Image.created_at.desc()).all()
+        return render_template('newsletter.html', images=images)
+    except Exception as e:
+        logging.error(f"Error in newsletter view: {str(e)}")
+        return "Error loading newsletter view", 500
 
 @app.route('/portfolio')
 def portfolio():
-    images = Image.query.all()
-    return render_template('portfolio.html', images=images)
+    """Display images in portfolio layout"""
+    try:
+        images = Image.query.order_by(Image.created_at.desc()).all()
+        return render_template('portfolio.html', images=images)
+    except Exception as e:
+        logging.error(f"Error in portfolio view: {str(e)}")
+        return "Error loading portfolio view", 500
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=DEBUG)
