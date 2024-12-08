@@ -1,0 +1,1 @@
+Curation and Content Formatting Assistant. This is just a draft shell for now to implement a basic UI with image uploads, tags, descriptions, and templates for content generation with PDF export.  The app will eventually allow bulk uploads and better filtering options, as well as better template options.
